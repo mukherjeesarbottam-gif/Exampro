@@ -20,6 +20,22 @@ ExamPro is a web-based online examination system designed to simplify and digiti
 - 🔥 Firebase integration
 - 🎨 Modern responsive interface
 - 🌐 Firebase Hosting support
+## 📸 Screenshots
+
+### 🏠 Home Page
+![ExamPro Home](screenshots/home.png)
+
+### 🔐 Login
+![ExamPro Login](screenshots/login.png)
+
+### 📝 Registration
+![ExamPro Registration](screenshots/register.png)
+
+### 👨‍💼 Admin Dashboard
+![Admin Dashboard](screenshots/admin_dashboard.png)
+
+### 👨‍🎓 Student Dashboard
+![Student Dashboard](screenshots/student_dashboard.png)
 
 ## 🛠️ Technologies Used
 
