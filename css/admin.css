@@ -1,0 +1,127 @@
+/* Admin specific tweaks extending dashboard.css */
+
+/* 3D Admin Sidebar - Premium dark glass treatment */
+.sidebar-admin {
+  background: linear-gradient(180deg, var(--sidebar-bg) 0%, var(--sidebar-bg) 100%);
+  color: var(--sidebar-text);
+}
+
+[data-theme="light"] .sidebar-admin {
+  background: linear-gradient(180deg, #111827 0%, #1F2937 100%);
+  color: white;
+}
+
+[data-theme="light"] .sidebar-admin .sidebar-logo {
+  color: white;
+}
+
+[data-theme="light"] .sidebar-admin .nav-item {
+  color: #9CA3AF;
+}
+
+[data-theme="light"] .sidebar-admin .nav-item:hover,
+[data-theme="light"] .sidebar-admin .nav-item.active {
+  background-color: #374151;
+  color: white;
+}
+
+[data-theme="light"] .sidebar-admin .sidebar-header,
+[data-theme="light"] .sidebar-admin .sidebar-footer {
+  border-color: #374151;
+}
+
+[data-theme="dark"] .sidebar-admin {
+  background: linear-gradient(180deg, #1A1D27 0%, #14161E 100%);
+  color: var(--sidebar-text);
+}
+
+[data-theme="dark"] .sidebar-admin .nav-item:hover {
+  background: rgba(99, 102, 241, 0.15);
+}
+
+[data-theme="dark"] .sidebar-admin .nav-item.active {
+  background: rgba(99, 102, 241, 0.2);
+}
+
+.admin-chart-card {
+  min-height: 300px;
+}
+
+/* 3D Chart Card Enhancements */
+.admin-chart-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.admin-chart-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at top right, rgba(99, 102, 241, 0.05), transparent 40%);
+  opacity: 0;
+  transition: opacity var(--transition-normal);
+  pointer-events: none;
+}
+
+.admin-chart-card:hover::before {
+  opacity: 1;
+}
+
+/* Actions Dropdown */
+.action-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.action-btn {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 4px;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  right: 0;
+  background-color: var(--card-bg);
+  min-width: 120px;
+  box-shadow: var(--shadow-lg);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  z-index: 10;
+}
+
+.dropdown-content a {
+  color: var(--text-primary);
+  padding: 8px 12px;
+  text-decoration: none;
+  display: block;
+  font-size: 0.875rem;
+}
+
+.dropdown-content a:hover {
+  background-color: var(--bg-color);
+  color: var(--primary-color);
+}
+
+.dropdown-content a.text-error:hover {
+  color: var(--error-color);
+}
+
+.action-dropdown:hover .dropdown-content {
+  display: block;
+}
+
+/* Dark mode - force admin sidebar dark always for premium look */
+[data-theme="dark"] .sidebar-admin .sidebar-logo {
+  color: var(--primary-color);
+}
+
+[data-theme="dark"] .sidebar-admin .nav-item::after {
+  background: var(--primary-color);
+}

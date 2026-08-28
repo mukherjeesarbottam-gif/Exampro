@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Results - ExamPro</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/dashboard.css">
+  <script src="../js/theme.js"></script>
+</head>
+<body>
+
+  <div class="dashboard-layout">
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <a href="dashboard.html" class="sidebar-logo">
+          <i class="fa-solid fa-graduation-cap"></i> ExamPro
+        </a>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="dashboard.html" class="nav-item">
+          <i class="fa-solid fa-border-all"></i> Dashboard
+        </a>
+        <a href="available-exams.html" class="nav-item">
+          <i class="fa-solid fa-list-check"></i> Available Exams
+        </a>
+        <a href="results.html" class="nav-item active">
+          <i class="fa-solid fa-award"></i> My Results
+        </a>
+        <a href="profile.html" class="nav-item">
+          <i class="fa-regular fa-user"></i> Profile
+        </a>
+      </nav>
+      <div class="sidebar-footer">
+        <a href="#" class="nav-item" id="logoutBtn">
+          <i class="fa-solid fa-arrow-right-from-bracket"></i> Logout
+        </a>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="menu-toggle" id="menuToggle">
+            <i class="fa-solid fa-bars"></i>
+          </button>
+          <div class="page-title" style="margin:0; font-size: 1.25rem;">My Results</div>
+        </div>
+        <div class="topbar-right">
+          <button class="theme-toggle" aria-label="Toggle theme">
+            <i class="theme-toggle-icon fa-solid fa-moon"></i>
+          </button>
+          <div class="user-profile">
+            <div class="avatar" id="userAvatar">S</div>
+            <div class="user-info">
+              <span class="user-name" id="topbarUserName">Student</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div class="dashboard-body">
+        
+        <div class="card mb-lg">
+          <div class="card-body flex gap-md items-center" style="flex-wrap: wrap;">
+            <div class="search-bar" style="border: 1px solid var(--border-color); width: 300px;">
+              <i class="fa-solid fa-magnifying-glass text-muted"></i>
+              <input type="text" id="searchInput" placeholder="Search by exam name...">
+            </div>
+            
+            <select class="form-control" style="width: auto;" id="statusFilter">
+              <option value="">All Statuses</option>
+              <option value="Pass">Pass</option>
+              <option value="Fail">Fail</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="table-container">
+            <table class="table" id="resultsTable">
+              <thead>
+                <tr>
+                  <th>Exam Title</th>
+                  <th>Date Attempted</th>
+                  <th>Score</th>
+                  <th>Percentage</th>
+                  <th>Points</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Injected via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <script src="../js/main.js"></script>
+  <script type="module">
+    import "../js/services/authService.js";
+    import "../js/services/resultService.js";
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      const user = await window.ExamPro.AuthService.requireAuth('student');
+      if (!user) return;
+
+      document.getElementById('topbarUserName').innerText = user.name;
+      document.getElementById('userAvatar').innerText = user.name.charAt(0).toUpperCase();
+
+      // Sidebar toggle
+      const menuToggle    = document.getElementById('menuToggle');
+      const sidebar       = document.getElementById('sidebar');
+      const sidebarOverlay = document.getElementById('sidebarOverlay');
+      if (menuToggle && sidebar && sidebarOverlay) {
+        menuToggle.addEventListener('click', () => {
+          sidebar.classList.add('active');
+          sidebarOverlay.classList.add('active');
+        });
+        sidebarOverlay.addEventListener('click', () => {
+          sidebar.classList.remove('active');
+          sidebarOverlay.classList.remove('active');
+        });
+      }
+
+      document.getElementById('logoutBtn').addEventListener('click', (e) => {
+        e.preventDefault();
+        window.ExamPro.AuthService.logout();
+      });
+
+      const allResults = await window.ExamPro.ResultService.getResultsForStudent(user.uid);
+      const tbody = document.querySelector('#resultsTable tbody');
+
+      function renderResults(results) {
+        tbody.innerHTML = '';
+        if(results.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="7" class="text-center text-muted" style="padding: 40px;">No results found.</td></tr>';
+          return;
+        }
+
+        results.forEach(r => {
+          const badgeClass = r.status === 'Pass' ? 'badge-success' : 'badge-error';
+          const dateStr = r.submittedAt || r.date || '';
+          tbody.innerHTML += `
+            <tr>
+              <td style="font-weight: 500;">${r.examTitle || '—'}</td>
+              <td>${dateStr ? window.ExamPro.Utils.formatDate(dateStr) : '—'}</td>
+              <td>${r.score ?? '--'} / ${r.totalMarks ?? '--'}</td>
+              <td><span style="font-weight:600; color:var(--primary-color);">${r.percentage != null ? r.percentage.toFixed(1) + '%' : '—'}</span></td>
+              <td>${r.pointsEarned ?? 0}</td>
+              <td><span class="badge ${badgeClass}">${r.status || '—'}</span></td>
+              <td><a href="detailed-result.html?id=${r.id}" class="btn btn-outline" style="padding: 4px 8px; font-size: 0.75rem;">View Details</a></td>
+            </tr>
+          `;
+        });
+      }
+
+      renderResults(allResults);
+
+      const searchInput = document.getElementById('searchInput');
+      const statusFilter = document.getElementById('statusFilter');
+
+      function filterResults() {
+        const query = searchInput.value.toLowerCase();
+        const stat = statusFilter.value;
+
+        const filtered = allResults.filter(r => {
+          const matchQuery = (r.examTitle || '').toLowerCase().includes(query);
+          const matchStat = stat === '' || r.status === stat;
+          return matchQuery && matchStat;
+        });
+        renderResults(filtered);
+      }
+
+      searchInput.addEventListener('input', filterResults);
+      statusFilter.addEventListener('change', filterResults);
+    });
+  </script>
+</body>
+</html>

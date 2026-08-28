@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Detailed Result - ExamPro</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <script src="../js/theme.js"></script>
+  <style>
+    .details-layout {
+      min-height: 100vh;
+      background-color: var(--bg-color);
+      display: flex;
+      flex-direction: column;
+    }
+    .topbar-simple {
+      height: 70px;
+      background-color: var(--card-bg);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      padding: 0 var(--spacing-xl);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .main-container {
+      max-width: 900px;
+      margin: var(--spacing-xl) auto;
+      padding: 0 var(--spacing-lg);
+      flex: 1;
+      width: 100%;
+    }
+    .result-summary {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-lg);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--spacing-xl);
+    }
+    .q-card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-lg);
+      margin-bottom: var(--spacing-md);
+    }
+    .q-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: var(--spacing-md);
+      padding-bottom: var(--spacing-sm);
+      border-bottom: 1px solid var(--border-color);
+    }
+    .opt {
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--bg-color);
+    }
+    .opt.correct {
+      background-color: var(--success-bg);
+      border-color: var(--success-color);
+      color: var(--text-primary);
+    }
+    .opt.wrong {
+      background-color: var(--error-bg);
+      border-color: var(--error-color);
+      color: var(--text-primary);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="details-layout">
+    <header class="topbar-simple">
+      <div class="logo">
+        <i class="fa-solid fa-graduation-cap"></i> ExamPro
+      </div>
+      <button class="theme-toggle" aria-label="Toggle theme" style="margin-left: auto;">
+        <i class="theme-toggle-icon fa-solid fa-moon"></i>
+      </button>
+      <a href="results.html" class="btn btn-ghost" style="margin-left: 12px;">Back to Results</a>
+    </header>
+
+    <main class="main-container">
+      <div class="result-summary">
+        <div>
+          <h2 id="examTitle">Loading...</h2>
+          <p class="text-muted" id="examDate">--</p>
+        </div>
+        <div style="text-align: right;">
+          <h2 id="examScore" style="color: var(--primary-color);">-- / --</h2>
+          <span class="badge" id="examStatus">--</span>
+        </div>
+      </div>
+
+      <h3 class="mb-lg">Question Breakdown</h3>
+      <div id="questionsContainer">
+        <!-- Injected via JS -->
+        <div class="text-center" style="padding: 40px;"><i class="fa-solid fa-spinner fa-spin text-primary" style="font-size: 2rem;"></i></div>
+      </div>
+    </main>
+  </div>
+
+  <script src="../js/main.js"></script>
+  <script type="module" src="../js/student/detailed-result.js"></script>
+</body>
+</html>

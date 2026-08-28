@@ -1,0 +1,1310 @@
+/* ==========================================
+   ExamPro — Futuristic 3D Login Page
+   Purple neon space theme — Premium 3D Experience
+   ========================================== */
+
+/* ── Page base ─────────────────────────────── */
+.login-page {
+  background: #020208;
+  overflow-x: hidden;
+  position: relative;
+}
+
+.login-page .auth-container {
+  background: transparent;
+}
+
+/* ── Cinematic background layers ───────────── */
+/* Deep space nebula + radial lighting behind card */
+.login-page::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    /* Purple nebula glow — upper left */
+    radial-gradient(ellipse 60% 40% at 20% 15%, rgba(124, 58, 237, 0.10), transparent 70%),
+    /* Blue-violet nebula — lower right */
+    radial-gradient(ellipse 55% 45% at 85% 80%, rgba(99, 102, 241, 0.08), transparent 70%),
+    /* Deep purple center glow */
+    radial-gradient(ellipse 45% 35% at 50% 50%, rgba(168, 85, 247, 0.06), transparent 75%),
+    /* Base black */
+    #020208;
+}
+
+/* Larger blurred glowing particles (background) */
+.login-page::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle 6px at 12% 30%, rgba(192, 132, 252, 0.35), transparent 70%),
+    radial-gradient(circle 4px at 88% 22%, rgba(129, 140, 248, 0.3), transparent 70%),
+    radial-gradient(circle 8px at 75% 65%, rgba(168, 85, 247, 0.25), transparent 70%),
+    radial-gradient(circle 3px at 30% 75%, rgba(192, 132, 252, 0.3), transparent 70%),
+    radial-gradient(circle 5px at 55% 12%, rgba(99, 102, 241, 0.25), transparent 70%);
+  animation: bgParticlesDrift 18s ease-in-out infinite alternate;
+}
+
+@keyframes bgParticlesDrift {
+  0% { transform: translateY(0) scale(1); opacity: 0.7; }
+  50% { transform: translateY(-12px) scale(1.05); opacity: 1; }
+  100% { transform: translateY(6px) scale(0.98); opacity: 0.75; }
+}
+
+/* ── Navbar ────────────────────────────────── */
+.login-navbar {
+  background: rgba(8, 8, 16, 0.55);
+  backdrop-filter: blur(20px) saturate(150%);
+  -webkit-backdrop-filter: blur(20px) saturate(150%);
+  border-bottom: 1px solid rgba(168, 85, 247, 0.15);
+  padding: 0.875rem 1.5rem;
+  position: relative;
+  z-index: 100;
+}
+
+/* Perfectly center the nav-links in the middle of the navbar */
+.login-navbar .nav-links {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+}
+
+.login-navbar .logo {
+  color: #fff;
+  font-size: 1.4rem;
+  gap: 0.6rem;
+}
+
+.login-navbar .nav-actions {
+  margin-left: auto;
+}
+
+.login-navbar .logo i {
+  color: #a855f7;
+  text-shadow: 0 0 18px rgba(168, 85, 247, 0.8);
+  font-size: 1.35rem;
+}
+
+.login-navbar .logo-text {
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.login-navbar .logo-pro {
+  color: #a855f7;
+  text-shadow: 0 0 16px rgba(168, 85, 247, 0.7);
+}
+
+.login-navbar .nav-links a {
+  color: rgba(255, 255, 255, 0.72);
+  font-weight: 500;
+  position: relative;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  transition: color 0.2s ease, text-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.login-navbar .nav-links a:hover {
+  color: #fff;
+  text-shadow: 0 0 20px rgba(168, 85, 247, 0.5);
+  transform: translateY(-1px);
+}
+
+.login-navbar .nav-links a.active {
+  color: #fff;
+  text-shadow: 0 0 20px rgba(168, 85, 247, 0.4);
+}
+
+.login-navbar .nav-links a.active::after {
+  content: '';
+  position: absolute;
+  left: 0.75rem;
+  right: 0.75rem;
+  bottom: 2px;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #a855f7, #818cf8);
+  box-shadow: 0 0 14px rgba(168, 85, 247, 0.8);
+}
+
+/* Back to Home button — 3D raised */
+.btn-back-home {
+  border-radius: 50px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(168, 85, 247, 0.45);
+  color: #fff;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow:
+    0 4px 0 rgba(168, 85, 247, 0.15),
+    0 8px 24px rgba(0, 0, 0, 0.35),
+    0 0 18px rgba(168, 85, 247, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  padding: 0.6rem 1.4rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  transform: none;
+  transition:
+    transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+    background 0.25s ease,
+    border-color 0.25s ease;
+}
+
+.btn-back-home i {
+  font-size: 0.8rem;
+  color: #c084fc;
+}
+
+.btn-back-home:hover {
+  background: rgba(168, 85, 247, 0.15);
+  border-color: rgba(192, 132, 252, 0.7);
+  transform: translateY(-3px);
+  box-shadow:
+    0 7px 0 rgba(168, 85, 247, 0.2),
+    0 14px 32px rgba(0, 0, 0, 0.45),
+    0 0 28px rgba(168, 85, 247, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+.btn-back-home:active {
+  transform: translateY(2px);
+  box-shadow:
+    0 1px 0 rgba(168, 85, 247, 0.15),
+    0 3px 10px rgba(0, 0, 0, 0.3),
+    inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* ── Login container ───────────────────────── */
+.login-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 96px 1.5rem 3rem;
+  position: relative;
+  z-index: 1;
+  perspective: 1200px;
+}
+
+/* Soft ambient purple glow behind the login card —
+   enhanced with layered radial lighting for depth */
+.login-container::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: min(720px, 88vw);
+  height: min(580px, 76vh);
+  transform: translate(-50%, -50%);
+  background:
+    radial-gradient(
+      ellipse at center,
+      rgba(168, 85, 247, 0.14) 0%,
+      rgba(99, 102, 241, 0.08) 40%,
+      transparent 70%
+    ),
+    radial-gradient(
+      ellipse at 30% 20%,
+      rgba(192, 132, 252, 0.06) 0%,
+      transparent 60%
+    ),
+    radial-gradient(
+      ellipse at 70% 80%,
+      rgba(99, 102, 241, 0.05) 0%,
+      transparent 60%
+    );
+  pointer-events: none;
+  z-index: -1;
+  animation: cardBacklightPulse 6s ease-in-out infinite alternate;
+}
+
+@keyframes cardBacklightPulse {
+  0% { opacity: 0.8; }
+  100% { opacity: 1; }
+}
+
+/* ── Login card — Premium 3D Glass ─────────── */
+.login-card {
+  width: 100%;
+  max-width: 600px;
+  padding: 2.75rem 3rem 2.5rem;
+  border-radius: 30px;
+  /* Override auth-panel-3d tilt/float — keep card stable & centered */
+  animation: none;
+  background:
+    /* Layered translucent glass material */
+    linear-gradient(
+      160deg,
+      rgba(24, 22, 48, 0.78) 0%,
+      rgba(12, 12, 26, 0.68) 45%,
+      rgba(18, 16, 38, 0.78) 100%
+    );
+  backdrop-filter: blur(36px) saturate(180%);
+  -webkit-backdrop-filter: blur(36px) saturate(180%);
+  border: 1px solid rgba(168, 85, 247, 0.3);
+  /* Layered depth: outer shadow + inner glow + bevel */
+  box-shadow:
+    /* Deep drop shadow — floating object */
+    0 40px 100px rgba(0, 0, 0, 0.75),
+    /* Purple ambient glow */
+    0 0 70px rgba(168, 85, 247, 0.14),
+    0 0 140px rgba(99, 102, 241, 0.1),
+    /* Rim light — top edge */
+    0 -1px 0 rgba(255, 255, 255, 0.08),
+    /* Inner glow — top */
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    /* Inner glow — bottom */
+    inset 0 -1px 0 rgba(168, 85, 247, 0.1),
+    /* Inner bevel — subtle depth */
+    inset 0 2px 8px rgba(0, 0, 0, 0.2),
+    inset 0 -2px 8px rgba(168, 85, 247, 0.04);
+  position: relative;
+  transform: perspective(1200px) rotateX(1deg);
+  transform-style: preserve-3d;
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s ease;
+  will-change: transform;
+}
+
+/* When JS parallax is active, disable CSS transition for smooth rAF control */
+.login-card.parallax-active {
+  transition: box-shadow 0.5s ease;
+}
+
+/* Top edge cool-white/blue highlight — rim light */
+.login-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 8%;
+  right: 8%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.6) 30%,
+    rgba(192, 132, 252, 0.7) 50%,
+    rgba(255, 255, 255, 0.6) 70%,
+    transparent
+  );
+  box-shadow: 0 0 14px rgba(255, 255, 255, 0.4);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Subtle purple gradient reflection overlay */
+.login-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 30px;
+  background:
+    radial-gradient(
+      120% 80% at 50% 0%,
+      rgba(168, 85, 247, 0.1),
+      transparent 55%
+    ),
+    radial-gradient(
+      80% 60% at 85% 100%,
+      rgba(99, 102, 241, 0.06),
+      transparent 60%
+    );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Glass reflection sheen — subtle diagonal light */
+.login-card .card-sheen {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 30px;
+  background: linear-gradient(
+    115deg,
+    transparent 20%,
+    rgba(255, 255, 255, 0.03) 35%,
+    rgba(255, 255, 255, 0.06) 40%,
+    transparent 55%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+.login-card:hover {
+  transform: perspective(1200px) rotateX(0deg);
+  box-shadow:
+    0 44px 110px rgba(0, 0, 0, 0.8),
+    0 0 80px rgba(168, 85, 247, 0.18),
+    0 0 160px rgba(99, 102, 241, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    inset 0 -1px 0 rgba(168, 85, 247, 0.12),
+    inset 0 2px 8px rgba(0, 0, 0, 0.18);
+}
+
+/* ── Page entrance animation ───────────────── */
+@keyframes loginCardEntrance {
+  0% {
+    opacity: 0;
+    transform: perspective(1200px) rotateX(8deg) translateY(40px) scale(0.96);
+  }
+  100% {
+    opacity: 1;
+    transform: perspective(1200px) rotateX(1deg) translateY(0) scale(1);
+  }
+}
+
+.login-card {
+  animation: loginCardEntrance 0.9s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+}
+
+/* ── Card header ───────────────────────────── */
+.login-card-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  position: relative;
+  z-index: 2;
+}
+
+.login-icon {
+  width: 72px;
+  height: 72px;
+  margin: 0 auto 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  color: #c084fc;
+  background: radial-gradient(circle at 30% 30%, rgba(168, 85, 247, 0.3), rgba(99, 102, 241, 0.15));
+  border: 1px solid rgba(168, 85, 247, 0.45);
+  border-radius: 22px;
+  box-shadow:
+    0 0 35px rgba(168, 85, 247, 0.4),
+    0 8px 24px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.2);
+  animation: loginIconFloat 4s ease-in-out infinite;
+  position: relative;
+}
+
+/* Icon inner glow */
+.login-icon::after {
+  content: '';
+  position: absolute;
+  inset: 4px;
+  border-radius: 18px;
+  background: radial-gradient(circle at 50% 30%, rgba(192, 132, 252, 0.15), transparent 70%);
+  pointer-events: none;
+}
+
+@keyframes loginIconFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+/* ── 3D Typography ─────────────────────────── */
+.login-title {
+  font-size: 2.1rem;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.75rem;
+  /* Subtle 3D depth + soft glow */
+  text-shadow:
+    0 2px 24px rgba(0, 0, 0, 0.5),
+    0 1px 0 rgba(255, 255, 255, 0.08),
+    0 0 30px rgba(168, 85, 247, 0.15);
+}
+
+.login-title-pro {
+  /* Subtle purple gradient text */
+  background: linear-gradient(135deg, #c084fc 0%, #a855f7 50%, #818cf8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 18px rgba(168, 85, 247, 0.5));
+}
+
+.login-welcome {
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 0.4rem;
+  letter-spacing: -0.01em;
+  text-shadow:
+    0 2px 16px rgba(0, 0, 0, 0.4),
+    0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.login-subtitle {
+  font-size: 0.9375rem;
+  color: rgba(255, 255, 255, 0.55);
+  line-height: 1.5;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* ── Form ──────────────────────────────────── */
+.login-card form {
+  position: relative;
+  z-index: 2;
+}
+
+.login-card .form-group {
+  margin-bottom: 1.25rem;
+}
+
+.login-card .form-label {
+  display: block;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.02em;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Input wrapper with icons */
+.input-wrapper {
+  position: relative;
+}
+
+.input-icon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 0.875rem;
+  pointer-events: none;
+  transition: color 0.25s ease, text-shadow 0.25s ease;
+  z-index: 2;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 0.9375rem;
+  cursor: pointer;
+  transition: color 0.25s ease, text-shadow 0.25s ease;
+  z-index: 2;
+}
+
+.toggle-password:hover {
+  color: #c084fc;
+  text-shadow: 0 0 12px rgba(192, 132, 252, 0.5);
+}
+
+/* Login input — 3D dark glass material */
+.login-input {
+  width: 100%;
+  padding: 0.875rem 2.75rem 0.875rem 2.6rem;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: #fff;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.03));
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 14px;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  /* Raised border + inner shadow for depth */
+  box-shadow:
+    inset 0 2px 6px rgba(0, 0, 0, 0.25),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.06),
+    0 1px 0 rgba(255, 255, 255, 0.04);
+  transition:
+    border-color 0.3s ease,
+    box-shadow 0.3s ease,
+    background 0.3s ease,
+    transform 0.3s ease;
+  font-family: inherit;
+}
+
+.login-input::placeholder {
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.login-input:focus {
+  outline: none;
+  border-color: rgba(168, 85, 247, 0.75);
+  background:
+    linear-gradient(180deg, rgba(168, 85, 247, 0.08), rgba(99, 102, 241, 0.04));
+  /* Purple focus glow + raised effect */
+  box-shadow:
+    0 0 0 3px rgba(168, 85, 247, 0.18),
+    0 0 28px rgba(168, 85, 247, 0.25),
+    inset 0 2px 6px rgba(0, 0, 0, 0.2),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.08);
+  transform: translateY(-1px);
+}
+
+.login-input:focus ~ .input-icon,
+.input-wrapper:focus-within .input-icon {
+  color: #c084fc;
+  text-shadow: 0 0 14px rgba(192, 132, 252, 0.6);
+}
+
+/* ── Options row ───────────────────────────── */
+.login-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  font-size: 0.875rem;
+}
+
+.remember-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  user-select: none;
+}
+
+.neon-checkbox {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.checkbox-custom {
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+  border: 1px solid rgba(168, 85, 247, 0.5);
+  background: rgba(168, 85, 247, 0.08);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s ease;
+  flex-shrink: 0;
+  box-shadow:
+    inset 0 1px 2px rgba(0, 0, 0, 0.2),
+    0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.checkbox-custom i {
+  font-size: 0.625rem;
+  color: #fff;
+  opacity: 0;
+  transform: scale(0.5);
+  transition: all 0.2s ease;
+}
+
+.neon-checkbox:checked + .checkbox-custom {
+  background: linear-gradient(135deg, #a855f7, #7c3aed);
+  border-color: #a855f7;
+  box-shadow:
+    0 0 14px rgba(168, 85, 247, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.neon-checkbox:checked + .checkbox-custom i {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.neon-checkbox:focus-visible + .checkbox-custom {
+  box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.3);
+}
+
+.forgot-link {
+  color: #a855f7;
+  font-weight: 500;
+  transition: color 0.2s ease, text-shadow 0.2s ease;
+}
+
+.forgot-link:hover {
+  color: #c084fc;
+  text-shadow: 0 0 14px rgba(168, 85, 247, 0.6);
+}
+
+/* ── Login submit button — Physical 3D ─────── */
+.login-submit-btn {
+  width: 100%;
+  padding: 0.9375rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  border-radius: 14px;
+  background: linear-gradient(145deg, #a855f7 0%, #7c3aed 45%, #6d28d9 100%);
+  border: 1px solid rgba(192, 132, 252, 0.6);
+  color: #fff;
+  box-shadow:
+    0 6px 0 #4c1d95,
+    0 12px 32px rgba(168, 85, 247, 0.4),
+    0 0 24px rgba(168, 85, 247, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.2);
+  transform: translateY(0);
+  transition:
+    transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+    filter 0.25s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.login-submit-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), transparent 50%);
+  pointer-events: none;
+}
+
+.login-submit-btn::after {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 17px;
+  background: radial-gradient(
+    300px circle at 50% 50%,
+    rgba(192, 132, 252, 0.4),
+    transparent 60%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.login-submit-btn i {
+  font-size: 0.875rem;
+  margin-right: 0.25rem;
+}
+
+.login-submit-btn:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 10px 0 #4c1d95,
+    0 18px 44px rgba(168, 85, 247, 0.55),
+    0 0 36px rgba(168, 85, 247, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.15);
+  filter: brightness(1.08);
+}
+
+.login-submit-btn:hover::after {
+  opacity: 1;
+}
+
+.login-submit-btn:active {
+  transform: translateY(3px);
+  box-shadow:
+    0 2px 0 #4c1d95,
+    0 4px 12px rgba(168, 85, 247, 0.3),
+    inset 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.login-submit-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: 0 4px 0 #4c1d95, 0 8px 20px rgba(168, 85, 247, 0.3);
+}
+
+/* ── Divider ───────────────────────────────── */
+.login-divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 1.5rem 0;
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.login-divider::before,
+.login-divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.login-divider::before {
+  margin-right: 1rem;
+}
+
+.login-divider::after {
+  margin-left: 1rem;
+}
+
+/* ── Google login button — 3D glass ────────── */
+.google-login-btn {
+  width: 100%;
+  padding: 0.875rem 1.5rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: #fff;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow:
+    0 4px 0 rgba(255, 255, 255, 0.06),
+    0 8px 24px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+  transform: none;
+  transition:
+    transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+    background 0.25s ease,
+    border-color 0.25s ease;
+  position: relative;
+}
+
+.google-icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 0.5rem;
+  flex-shrink: 0;
+}
+
+.google-login-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(168, 85, 247, 0.4);
+  transform: translateY(-3px);
+  box-shadow:
+    0 7px 0 rgba(255, 255, 255, 0.08),
+    0 14px 32px rgba(0, 0, 0, 0.45),
+    0 0 24px rgba(168, 85, 247, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.14);
+}
+
+.google-login-btn:active {
+  transform: translateY(2px);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.06),
+    0 3px 10px rgba(0, 0, 0, 0.3),
+    inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.google-login-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* ── Footer ────────────────────────────────── */
+.login-footer {
+  text-align: center;
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.6);
+  margin-top: 1.5rem;
+  position: relative;
+  z-index: 2;
+}
+
+.login-footer a {
+  color: #a855f7;
+  font-weight: 600;
+  transition: color 0.2s ease, text-shadow 0.2s ease;
+}
+
+.login-footer a:hover {
+  color: #c084fc;
+  text-shadow: 0 0 14px rgba(168, 85, 247, 0.6);
+}
+
+/* ── Toast on dark background ──────────────── */
+.login-page .toast {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(168, 85, 247, 0.25);
+}
+
+/* ══════════════════════════════════════════
+   FLOATING 3D ELEMENTS
+   CSS-based objects around the login card
+   ══════════════════════════════════════════ */
+
+.floating-elements {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+  perspective: 1000px;
+}
+
+.float-object {
+  position: absolute;
+  will-change: transform, opacity;
+}
+
+/* ── Graduation Cap ────────────────────────── */
+.float-cap {
+  top: 18%;
+  left: 6%;
+  font-size: 2.2rem;
+  color: #a855f7;
+  text-shadow:
+    0 0 25px rgba(168, 85, 247, 0.6),
+    0 0 50px rgba(168, 85, 247, 0.3);
+  transform: rotate(-12deg);
+  animation: floatCapAnim 7s ease-in-out infinite;
+  opacity: 0.7;
+}
+
+@keyframes floatCapAnim {
+  0%, 100% {
+    transform: rotate(-12deg) translateY(0) rotateY(0deg);
+  }
+  25% {
+    transform: rotate(-8deg) translateY(-14px) rotateY(15deg);
+  }
+  50% {
+    transform: rotate(-12deg) translateY(-6px) rotateY(0deg);
+  }
+  75% {
+    transform: rotate(-16deg) translateY(-18px) rotateY(-15deg);
+  }
+}
+
+/* ── Glowing Spheres ───────────────────────── */
+.float-sphere {
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 35% 30%,
+    rgba(255, 255, 255, 0.5),
+    rgba(168, 85, 247, 0.4) 30%,
+    rgba(99, 102, 241, 0.2) 60%,
+    transparent 75%
+  );
+  box-shadow:
+    0 0 30px rgba(168, 85, 247, 0.4),
+    0 0 60px rgba(99, 102, 241, 0.2),
+    inset 0 -4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.sphere-1 {
+  width: 34px;
+  height: 34px;
+  top: 22%;
+  right: 8%;
+  animation: floatSphere1 8s ease-in-out infinite;
+  opacity: 0.75;
+}
+
+.sphere-2 {
+  width: 20px;
+  height: 20px;
+  bottom: 20%;
+  left: 10%;
+  animation: floatSphere2 6s ease-in-out infinite;
+  opacity: 0.6;
+}
+
+@keyframes floatSphere1 {
+  0%, 100% { transform: translateY(0) translateX(0) scale(1); }
+  33% { transform: translateY(-18px) translateX(8px) scale(1.05); }
+  66% { transform: translateY(-8px) translateX(-6px) scale(0.98); }
+}
+
+@keyframes floatSphere2 {
+  0%, 100% { transform: translateY(0) translateX(0) scale(1); }
+  50% { transform: translateY(-14px) translateX(-10px) scale(1.08); }
+}
+
+/* ── Geometric Cubes ───────────────────────── */
+.float-cube {
+  width: 26px;
+  height: 26px;
+  border: 1px solid rgba(168, 85, 247, 0.5);
+  background: rgba(168, 85, 247, 0.06);
+  box-shadow:
+    0 0 18px rgba(168, 85, 247, 0.25),
+    inset 0 0 12px rgba(168, 85, 247, 0.1);
+  transform-style: preserve-3d;
+}
+
+.cube-1 {
+  top: 30%;
+  right: 14%;
+  animation: floatCube1 10s ease-in-out infinite;
+  opacity: 0.65;
+}
+
+.cube-2 {
+  bottom: 26%;
+  right: 7%;
+  width: 18px;
+  height: 18px;
+  animation: floatCube2 8s ease-in-out infinite;
+  opacity: 0.5;
+}
+
+@keyframes floatCube1 {
+  0%, 100% {
+    transform: rotateX(0deg) rotateY(0deg) translateY(0);
+  }
+  25% {
+    transform: rotateX(45deg) rotateY(30deg) translateY(-16px);
+  }
+  50% {
+    transform: rotateX(90deg) rotateY(60deg) translateY(-8px);
+  }
+  75% {
+    transform: rotateX(45deg) rotateY(90deg) translateY(-20px);
+  }
+}
+
+@keyframes floatCube2 {
+  0%, 100% {
+    transform: rotateX(0deg) rotateY(0deg) translateY(0);
+  }
+  50% {
+    transform: rotateX(-45deg) rotateY(-30deg) translateY(-12px);
+  }
+}
+
+/* ── Thin Floating Rings ───────────────────── */
+.float-ring {
+  border-radius: 50%;
+  border: 2px solid rgba(168, 85, 247, 0.35);
+  box-shadow:
+    0 0 20px rgba(168, 85, 247, 0.2),
+    inset 0 0 15px rgba(168, 85, 247, 0.1);
+}
+
+.ring-1 {
+  width: 48px;
+  height: 48px;
+  top: 12%;
+  right: 22%;
+  animation: floatRing1 9s ease-in-out infinite;
+  opacity: 0.55;
+}
+
+.ring-2 {
+  width: 30px;
+  height: 30px;
+  bottom: 14%;
+  left: 18%;
+  border-width: 1.5px;
+  animation: floatRing2 7s ease-in-out infinite;
+  opacity: 0.45;
+}
+
+@keyframes floatRing1 {
+  0%, 100% {
+    transform: rotateX(60deg) rotateY(0deg) translateY(0);
+  }
+  50% {
+    transform: rotateX(60deg) rotateY(180deg) translateY(-14px);
+  }
+}
+
+@keyframes floatRing2 {
+  0%, 100% {
+    transform: rotateX(70deg) rotateY(0deg) translateY(0);
+  }
+  50% {
+    transform: rotateX(70deg) rotateY(-180deg) translateY(-10px);
+  }
+}
+
+/* ── Tiny Particles ────────────────────────── */
+.float-particle {
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(192, 132, 252, 0.9), rgba(168, 85, 247, 0.3) 60%, transparent 70%);
+  box-shadow: 0 0 12px rgba(168, 85, 247, 0.5);
+}
+
+.particle-1 {
+  width: 5px;
+  height: 5px;
+  top: 15%;
+  left: 25%;
+  animation: floatParticle1 5s ease-in-out infinite;
+  opacity: 0.7;
+}
+
+.particle-2 {
+  width: 4px;
+  height: 4px;
+  top: 40%;
+  right: 4%;
+  animation: floatParticle2 4s ease-in-out infinite;
+  opacity: 0.6;
+}
+
+.particle-3 {
+  width: 6px;
+  height: 6px;
+  bottom: 30%;
+  right: 28%;
+  animation: floatParticle3 6s ease-in-out infinite;
+  opacity: 0.5;
+}
+
+.particle-4 {
+  width: 3px;
+  height: 3px;
+  bottom: 12%;
+  left: 35%;
+  animation: floatParticle4 4.5s ease-in-out infinite;
+  opacity: 0.6;
+}
+
+.particle-5 {
+  width: 4px;
+  height: 4px;
+  top: 55%;
+  left: 5%;
+  animation: floatParticle5 5.5s ease-in-out infinite;
+  opacity: 0.5;
+}
+
+@keyframes floatParticle1 {
+  0%, 100% { transform: translateY(0) translateX(0); opacity: 0.7; }
+  50% { transform: translateY(-20px) translateX(10px); opacity: 1; }
+}
+
+@keyframes floatParticle2 {
+  0%, 100% { transform: translateY(0) translateX(0); opacity: 0.6; }
+  50% { transform: translateY(-14px) translateX(-8px); opacity: 0.9; }
+}
+
+@keyframes floatParticle3 {
+  0%, 100% { transform: translateY(0) translateX(0); opacity: 0.5; }
+  50% { transform: translateY(-18px) translateX(12px); opacity: 0.8; }
+}
+
+@keyframes floatParticle4 {
+  0%, 100% { transform: translateY(0) translateX(0); opacity: 0.6; }
+  50% { transform: translateY(-12px) translateX(-6px); opacity: 0.9; }
+}
+
+@keyframes floatParticle5 {
+  0%, 100% { transform: translateY(0) translateX(0); opacity: 0.5; }
+  50% { transform: translateY(-16px) translateX(8px); opacity: 0.85; }
+}
+
+/* ── Responsive ────────────────────────────── */
+
+/* Tablet */
+@media (max-width: 900px) {
+  .login-card {
+    max-width: 560px;
+    padding: 2.5rem 2.5rem 2.25rem;
+  }
+
+  .login-navbar {
+    padding: 0.75rem 1.25rem;
+  }
+
+  /* Reduce floating elements on tablet */
+  .float-cap { left: 3%; font-size: 1.8rem; }
+  .sphere-1 { right: 4%; }
+  .cube-1 { right: 8%; }
+  .ring-1 { right: 14%; }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .login-container {
+    padding: 88px 1rem 2rem;
+  }
+
+  .login-card {
+    max-width: 94%;
+    padding: 2rem 1.5rem 1.75rem;
+    border-radius: 24px;
+    /* Reduce blur cost on mobile */
+    backdrop-filter: blur(20px) saturate(150%);
+    -webkit-backdrop-filter: blur(20px) saturate(150%);
+    /* Simplify shadows on mobile */
+    box-shadow:
+      0 24px 60px rgba(0, 0, 0, 0.7),
+      0 0 40px rgba(168, 85, 247, 0.12),
+      inset 0 1px 0 rgba(255, 255, 255, 0.12),
+      inset 0 -1px 0 rgba(168, 85, 247, 0.08);
+  }
+
+  .login-icon {
+    width: 60px;
+    height: 60px;
+    font-size: 1.6rem;
+    border-radius: 18px;
+  }
+
+  .login-title {
+    font-size: 1.75rem;
+  }
+
+  .login-welcome {
+    font-size: 1.15rem;
+  }
+
+  .login-subtitle {
+    font-size: 0.875rem;
+  }
+
+  .login-input {
+    padding: 0.8125rem 2.5rem 0.8125rem 2.4rem;
+    font-size: 0.875rem;
+  }
+
+  .login-submit-btn,
+  .google-login-btn {
+    padding: 0.8125rem 1.25rem;
+    font-size: 0.9375rem;
+  }
+
+  /* Mobile navbar — compact */
+  .login-navbar {
+    padding: 0.625rem 0.75rem;
+    gap: 0.5rem;
+  }
+
+  .login-navbar .logo {
+    font-size: 1.1rem;
+    flex-shrink: 0;
+  }
+
+  .login-navbar .logo i {
+    font-size: 1.05rem;
+  }
+
+  .login-navbar .nav-links {
+    position: static;
+    left: auto;
+    transform: none;
+    gap: 0.125rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    flex: 1;
+    justify-content: center;
+  }
+
+  .login-navbar .nav-links::-webkit-scrollbar {
+    display: none;
+  }
+
+  .login-navbar .nav-links a {
+    padding: 0.4rem 0.5rem;
+    font-size: 0.8125rem;
+    white-space: nowrap;
+  }
+
+  .btn-back-home {
+    padding: 0.5rem 0.9rem;
+    font-size: 0.8125rem;
+    flex-shrink: 0;
+  }
+
+  .btn-back-home span {
+    display: none;
+  }
+
+  /* ── Mobile: reduce floating elements ── */
+  /* Keep only 2-3 subtle elements, hide the rest */
+  .float-cap { display: none; }
+  .sphere-1 { width: 22px; height: 22px; top: 15%; right: 5%; opacity: 0.5; }
+  .sphere-2 { display: none; }
+  .cube-1 { display: none; }
+  .cube-2 { display: none; }
+  .ring-1 { display: none; }
+  .ring-2 { display: none; }
+  .particle-1 { display: none; }
+  .particle-2 { display: none; }
+  .particle-3 { display: none; }
+  .particle-4 { display: none; }
+  .particle-5 { display: none; }
+
+  /* Reduce background particle cost */
+  .login-page::after {
+    animation: none;
+    opacity: 0.5;
+  }
+
+  /* Reduce nebula cost */
+  .login-page::before {
+    background:
+      radial-gradient(ellipse 50% 35% at 50% 50%, rgba(168, 85, 247, 0.05), transparent 70%),
+      #020208;
+  }
+
+  /* Disable card backlight pulse */
+  .login-container::before {
+    animation: none;
+  }
+}
+
+/* Small mobile */
+@media (max-width: 480px) {
+  .login-container {
+    padding: 80px 0.75rem 1.5rem;
+  }
+
+  .login-card {
+    padding: 1.75rem 1.25rem 1.5rem;
+  }
+
+  .login-options {
+    font-size: 0.8125rem;
+  }
+
+  .login-navbar .nav-links a:nth-child(2) {
+    display: none; /* Hide About on very small screens */
+  }
+
+  /* Hide remaining floating elements on very small screens */
+  .sphere-1 { display: none; }
+}
+
+/* ── Reduced motion ────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .login-icon {
+    animation: none;
+  }
+
+  .login-card {
+    transition: none;
+    animation: none;
+  }
+
+  .login-submit-btn,
+  .google-login-btn,
+  .btn-back-home {
+    transition: none;
+    transform: none !important;
+  }
+
+  /* Disable all floating element animations */
+  .float-object {
+    animation: none !important;
+    opacity: 0.3;
+  }
+
+  /* Disable background animations */
+  .login-page::after {
+    animation: none;
+  }
+
+  .login-container::before {
+    animation: none;
+  }
+
+  /* Disable input focus transform */
+  .login-input:focus {
+    transform: none;
+  }
+}

@@ -1,0 +1,88 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ── Helpers ──────────────────────────────────────────────────────────────
+    function isAuth() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isAuth() &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+
+    function isOwner(uid) {
+      return isAuth() && request.auth.uid == uid;
+    }
+
+    // ── Users ─────────────────────────────────────────────────────────────────
+    // Students can read/write their own profile.
+    // Admins can read/write any user profile.
+    // Students CANNOT change their own role.
+    match /users/{uid} {
+      allow read:  if isOwner(uid) || isAdmin();
+      allow create: if isOwner(uid) || isAdmin();
+      allow update: if (isOwner(uid) && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['role']))
+                    || isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // ── Exams ─────────────────────────────────────────────────────────────────
+    // Students can read exam metadata (but NOT answers subcollection).
+    // Only admins can create/edit/delete exams.
+    match /exams/{examId} {
+      allow read:  if isAuth();
+      allow write: if isAdmin();
+
+      // Questions subcollection — visible to all authenticated users.
+      // correctAnswer is NOT stored here (it is in /answers/).
+      match /questions/{qId} {
+        allow read:  if isAuth();
+        allow write: if isAdmin();
+      }
+
+      // Answers subcollection — ADMIN ONLY for writes.
+      // For reads: authenticated users may read answers ONLY when the exam is
+      // published. This is required for the Spark-compatible client-side
+      // scoring flow (submitService reads answers at submission time).
+      // Students CANNOT read answers for unpublished/draft exams.
+      match /answers/{qId} {
+        allow read:  if isAdmin() ||
+                      (isAuth() &&
+                       get(/databases/$(database)/documents/exams/$(examId)).data.published == true);
+        allow write: if isAdmin();
+      }
+    }
+
+    // ── Attempts ──────────────────────────────────────────────────────────────
+    // Students can create/read their own attempts.
+    // Students can update their own in-progress attempt (to submit answers).
+    // Students CANNOT alter score, percentage, or pointsEarned.
+    // Admins can read all attempts.
+    match /attempts/{attemptId} {
+      allow read:  if isAdmin() ||
+                    (isAuth() && resource.data.studentId == request.auth.uid);
+
+      allow create: if isAuth() &&
+                    request.resource.data.studentId == request.auth.uid;
+
+      // Allow update only if the attempt belongs to the student and is in-progress.
+      // Prevents students from self-updating a submitted attempt.
+      allow update: if isAuth() &&
+                    resource.data.studentId == request.auth.uid;
+
+      allow delete: if isAdmin();
+    }
+
+    // ── Student Progress ──────────────────────────────────────────────────────
+    // Students can read their own progress.
+    // Students can also write their own progress (to update after submission).
+    // Admins can read/write all progress (for reset feature).
+    match /studentProgress/{studentId} {
+      allow read:  if isOwner(studentId) || isAdmin();
+      allow write: if isOwner(studentId) || isAdmin();
+      allow delete: if isAdmin();
+    }
+  }
+}

@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Available Exams - ExamPro</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/dashboard.css">
+  <script src="../js/theme.js"></script>
+</head>
+<body>
+
+  <div class="dashboard-layout">
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <a href="dashboard.html" class="sidebar-logo">
+          <i class="fa-solid fa-graduation-cap"></i> ExamPro
+        </a>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="dashboard.html" class="nav-item">
+          <i class="fa-solid fa-border-all"></i> Dashboard
+        </a>
+        <a href="available-exams.html" class="nav-item active">
+          <i class="fa-solid fa-list-check"></i> Available Exams
+        </a>
+        <a href="results.html" class="nav-item">
+          <i class="fa-solid fa-award"></i> My Results
+        </a>
+        <a href="profile.html" class="nav-item">
+          <i class="fa-regular fa-user"></i> Profile
+        </a>
+      </nav>
+      <div class="sidebar-footer">
+        <a href="#" class="nav-item" id="logoutBtn">
+          <i class="fa-solid fa-arrow-right-from-bracket"></i> Logout
+        </a>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="menu-toggle" id="menuToggle">
+            <i class="fa-solid fa-bars"></i>
+          </button>
+          <div class="page-title" style="margin:0; font-size: 1.25rem;">Available Examinations</div>
+        </div>
+        <div class="topbar-right">
+          <button class="theme-toggle" aria-label="Toggle theme">
+            <i class="theme-toggle-icon fa-solid fa-moon"></i>
+          </button>
+          <div class="user-profile">
+            <div class="avatar" id="userAvatar">S</div>
+            <div class="user-info">
+              <span class="user-name" id="topbarUserName">Student</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div class="dashboard-body">
+        
+        <div class="card mb-lg">
+          <div class="card-body flex gap-md items-center" style="flex-wrap: wrap;">
+            <div class="search-bar" style="border: 1px solid var(--border-color); width: 300px;">
+              <i class="fa-solid fa-magnifying-glass text-muted"></i>
+              <input type="text" id="searchInput" placeholder="Search exams...">
+            </div>
+            
+            <select class="form-control" style="width: auto;" id="subjectFilter">
+              <option value="">All Subjects</option>
+              <option value="Computer Science">Computer Science</option>
+              <option value="Mathematics">Mathematics</option>
+            </select>
+            
+            <select class="form-control" style="width: auto;" id="difficultyFilter">
+              <option value="">All Difficulties</option>
+              <option value="Easy">Easy</option>
+              <option value="Medium">Medium</option>
+              <option value="Hard">Hard</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="exams-grid" id="examsContainer" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: var(--spacing-lg);">
+          <!-- Injected via JS -->
+          <div style="text-align: center; padding: 40px; grid-column: 1 / -1;">
+             <i class="fa-solid fa-spinner fa-spin text-primary" style="font-size: 2rem;"></i>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <script src="../js/main.js"></script>
+  <script type="module">
+    import "../js/services/authService.js";
+    import "../js/services/examService.js";
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      const user = await window.ExamPro.AuthService.requireAuth('student');
+      if (!user) return;
+
+      document.getElementById('topbarUserName').innerText = user.name;
+      document.getElementById('userAvatar').innerText = user.name.charAt(0).toUpperCase();
+
+      // Sidebar toggle
+      const menuToggle    = document.getElementById('menuToggle');
+      const sidebar       = document.getElementById('sidebar');
+      const sidebarOverlay = document.getElementById('sidebarOverlay');
+      if (menuToggle && sidebar && sidebarOverlay) {
+        menuToggle.addEventListener('click', () => {
+          sidebar.classList.add('active');
+          sidebarOverlay.classList.add('active');
+        });
+        sidebarOverlay.addEventListener('click', () => {
+          sidebar.classList.remove('active');
+          sidebarOverlay.classList.remove('active');
+        });
+      }
+
+      document.getElementById('logoutBtn').addEventListener('click', (e) => {
+        e.preventDefault();
+        window.ExamPro.AuthService.logout();
+      });
+
+      const examsContainer = document.getElementById('examsContainer');
+      // Only published + currently open exams (schedule window enforced)
+      const allExams = await window.ExamPro.ExamService.getAvailableExams();
+      
+      function renderExams(exams) {
+        examsContainer.innerHTML = '';
+        if(exams.length === 0) {
+          examsContainer.innerHTML = '<div style="grid-column: 1/-1; text-align:center; padding: 40px;" class="text-muted">No exams available right now. Check back later!</div>';
+          return;
+        }
+
+        exams.forEach(e => {
+          let difficultyClass = 'badge-success';
+          if(e.difficulty === 'Medium') difficultyClass = 'badge-warning';
+          if(e.difficulty === 'Hard') difficultyClass = 'badge-error';
+
+          examsContainer.innerHTML += `
+            <div class="card" style="display: flex; flex-direction: column;">
+              <div class="card-body" style="flex: 1;">
+                <div class="flex justify-between items-start mb-md">
+                  <div style="background: var(--primary-light); color: var(--primary-color); width: 40px; height: 40px; border-radius: 8px; display: flex; align-items:center; justify-content:center; font-size: 1.25rem;">
+                    <i class="fa-solid fa-code"></i>
+                  </div>
+                  <span class="badge ${difficultyClass}">${e.difficulty}</span>
+                </div>
+                <h3 style="font-size: 1.25rem; margin-bottom: 0.5rem;">${e.title}</h3>
+                <p class="text-muted" style="font-size: 0.875rem; margin-bottom: 1rem; line-height: 1.4;">${e.description || ''}</p>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 0.875rem; margin-bottom: 1rem;">
+                  <div><i class="fa-regular fa-clock text-muted"></i> ${e.duration} mins</div>
+                  <div><i class="fa-solid fa-list-ol text-muted"></i> ${e.totalQuestions} Questions</div>
+                  <div><i class="fa-solid fa-check-double text-muted"></i> ${e.totalMarks} Marks</div>
+                  <div><i class="fa-solid fa-star text-muted"></i> ${e.totalPoints || 0} Points</div>
+                </div>
+              </div>
+              <div class="card-footer" style="background: transparent;">
+                <a href="exam-instructions.html?id=${e.id}" class="btn btn-primary" style="width: 100%;">Start Exam</a>
+              </div>
+            </div>
+          `;
+        });
+      }
+
+      renderExams(allExams);
+
+      // Simple Filtering
+      const searchInput = document.getElementById('searchInput');
+      const subjectFilter = document.getElementById('subjectFilter');
+      const difficultyFilter = document.getElementById('difficultyFilter');
+
+      function filterExams() {
+        const query = searchInput.value.toLowerCase();
+        const subj = subjectFilter.value;
+        const diff = difficultyFilter.value;
+
+        const filtered = allExams.filter(e => {
+          const matchQuery = (e.title || '').toLowerCase().includes(query) || (e.description || '').toLowerCase().includes(query);
+          const matchSubj = subj === '' || e.subject === subj;
+          const matchDiff = diff === '' || e.difficulty === diff;
+          return matchQuery && matchSubj && matchDiff;
+        });
+        renderExams(filtered);
+      }
+
+      searchInput.addEventListener('input', filterExams);
+      subjectFilter.addEventListener('change', filterExams);
+      difficultyFilter.addEventListener('change', filterExams);
+    });
+  </script>
+</body>
+</html>

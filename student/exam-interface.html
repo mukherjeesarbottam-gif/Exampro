@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Examination - ExamPro</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/exam.css">
+  <script src="../js/theme.js"></script>
+</head>
+<body>
+
+  <div class="exam-layout">
+    
+    <header class="exam-topbar">
+      <div class="exam-title" id="examTitle">Loading Exam...</div>
+      <div class="exam-progress" id="examProgress">Question - of -</div>
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <button class="theme-toggle" aria-label="Toggle theme">
+          <i class="theme-toggle-icon fa-solid fa-moon"></i>
+        </button>
+        <div class="exam-timer" id="examTimer">
+          <i class="fa-regular fa-clock"></i> <span>--:--</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="exam-body">
+      
+      <main class="exam-main">
+        <div class="question-card">
+          <div class="question-header">
+            <div class="question-number" id="qNumber">Question 1</div>
+            <div class="question-marks" id="qMarks">+1 Mark</div>
+          </div>
+          
+          <div class="question-text" id="qText">
+            Loading question...
+          </div>
+          
+          <div class="options-container" id="optionsContainer">
+            <!-- Injected via JS -->
+          </div>
+
+          <div class="exam-footer">
+            <button class="btn btn-outline" id="prevBtn">
+              <i class="fa-solid fa-arrow-left"></i> Previous
+            </button>
+            
+            <button class="btn btn-warning" id="markBtn" style="background-color: var(--warning-color); color: white; border-color: var(--warning-color);">
+              Mark for Review
+            </button>
+            
+            <button class="btn btn-primary" id="nextBtn">
+              Next <i class="fa-solid fa-arrow-right"></i>
+            </button>
+          </div>
+        </div>
+      </main>
+
+      <aside class="exam-sidebar">
+        <div class="sidebar-header">
+          Question Navigator
+        </div>
+        
+        <div class="palette-container">
+          <div class="question-palette" id="questionPalette">
+            <!-- Injected via JS -->
+          </div>
+          
+          <div class="palette-legend">
+            <div class="legend-item">
+              <div class="legend-color answered"></div> Answered
+            </div>
+            <div class="legend-item">
+              <div class="legend-color not-answered"></div> Not Answered
+            </div>
+            <div class="legend-item">
+              <div class="legend-color marked"></div> Marked
+            </div>
+            <div class="legend-item">
+              <div class="legend-color answered-marked"></div> Ans & Marked
+            </div>
+          </div>
+        </div>
+        
+        <div class="sidebar-footer">
+          <button class="btn btn-success" style="width: 100%; background-color: var(--success-color); color: white;" id="submitExamBtn">
+            Submit Exam
+          </button>
+        </div>
+      </aside>
+      
+    </div>
+  </div>
+
+  <!-- Submit Modal -->
+  <div class="modal-overlay" id="submitModal">
+    <div class="modal-content" style="padding: var(--spacing-xl); text-align: center;">
+      <h2 class="mb-md">Submit Examination?</h2>
+      
+      <div style="display: flex; justify-content: center; gap: var(--spacing-lg); margin-bottom: var(--spacing-lg);">
+        <div style="text-align: center;">
+          <div style="font-size: 1.5rem; font-weight: 700; color: var(--success-color);" id="modalAns">0</div>
+          <div class="text-muted" style="font-size: 0.875rem;">Answered</div>
+        </div>
+        <div style="text-align: center;">
+          <div style="font-size: 1.5rem; font-weight: 700; color: var(--error-color);" id="modalUnans">0</div>
+          <div class="text-muted" style="font-size: 0.875rem;">Unanswered</div>
+        </div>
+        <div style="text-align: center;">
+          <div style="font-size: 1.5rem; font-weight: 700; color: var(--warning-color);" id="modalMarked">0</div>
+          <div class="text-muted" style="font-size: 0.875rem;">Marked</div>
+        </div>
+      </div>
+      
+      <div class="text-muted mb-lg" id="modalWarning"></div>
+      
+      <div class="flex gap-md justify-center">
+        <button class="btn btn-outline" id="cancelSubmitBtn">Cancel</button>
+        <button class="btn btn-primary" id="confirmSubmitBtn">Submit Exam</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/main.js"></script>
+  <script type="module" src="../js/student/exam-interface.js"></script>
+
+</body>
+</html>

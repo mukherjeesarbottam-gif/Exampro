@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>All Results - ExamPro</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/dashboard.css">
+  <link rel="stylesheet" href="../css/admin.css">
+  <script src="../js/theme.js"></script>
+</head>
+<body>
+
+  <div class="dashboard-layout">
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    <aside class="sidebar sidebar-admin" id="sidebar">
+      <div class="sidebar-header">
+        <a href="dashboard.html" class="sidebar-logo">
+          <i class="fa-solid fa-user-shield"></i> AdminPro
+        </a>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="dashboard.html" class="nav-item"><i class="fa-solid fa-border-all"></i> Dashboard</a>
+        <a href="exams.html" class="nav-item"><i class="fa-solid fa-file-signature"></i> Exams</a>
+        <a href="questions.html" class="nav-item"><i class="fa-solid fa-list-check"></i> Questions</a>
+        <a href="students.html" class="nav-item"><i class="fa-solid fa-users"></i> Students</a>
+        <a href="results.html" class="nav-item active"><i class="fa-solid fa-award"></i> Results</a>
+        <a href="analytics.html" class="nav-item"><i class="fa-solid fa-chart-line"></i> Analytics</a>
+      </nav>
+      <div class="sidebar-footer">
+        <a href="#" class="nav-item" id="logoutBtn"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</a>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="menu-toggle" id="menuToggle"><i class="fa-solid fa-bars"></i></button>
+          <div class="page-title" style="margin:0; font-size: 1.25rem;">Student Results</div>
+        </div>
+        <div class="topbar-right">
+          <button class="theme-toggle" aria-label="Toggle theme">
+            <i class="theme-toggle-icon fa-solid fa-moon"></i>
+          </button>
+        </div>
+      </header>
+
+      <div class="dashboard-body">
+        
+        <div class="card mb-lg">
+          <div class="card-body flex justify-between items-center" style="flex-wrap: wrap; gap: 16px;">
+            <div class="flex gap-md" style="flex-wrap: wrap;">
+              <select class="form-control" style="width: auto;" id="examFilter">
+                <option value="">All Exams</option>
+                <!-- Injected via JS -->
+              </select>
+              <select class="form-control" style="width: auto;" id="statusFilter">
+                <option value="">All Statuses</option>
+                <option value="Pass">Pass</option>
+                <option value="Fail">Fail</option>
+              </select>
+            </div>
+            
+            <button class="btn btn-outline"><i class="fa-solid fa-file-export"></i> Export CSV</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="table-container">
+            <table class="table" id="adminResultsTable">
+              <thead>
+                <tr>
+                  <th>Student</th>
+                  <th>Exam Title</th>
+                  <th>Date</th>
+                  <th>Score</th>
+                  <th>Percentage</th>
+                  <th>Points</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Injected via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <script src="../js/main.js"></script>
+  <script type="module">
+    import "../js/services/authService.js";
+    import "../js/services/examService.js";
+    import "../js/services/resultService.js";
+    import "../js/services/studentService.js";
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      await window.ExamPro.AuthService.requireAuth('admin');
+
+      const allExams = await window.ExamPro.ExamService.getAllExams();
+      const filter = document.getElementById('examFilter');
+      allExams.forEach(e => {
+        filter.innerHTML += `<option value="${e.id}">${e.title}</option>`;
+      });
+
+      const allResults = await window.ExamPro.ResultService.getAllResults();
+      const allStudents = await window.ExamPro.StudentService.getAllStudents();
+      const tbody = document.querySelector('#adminResultsTable tbody');
+
+      function renderResults(results) {
+        tbody.innerHTML = '';
+
+        if(results.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="7" class="text-center text-muted" style="padding: 40px;">No results found.</td></tr>';
+          return;
+        }
+
+        results.forEach(r => {
+          const student = allStudents.find(s => (s.uid || s.id) === r.studentId) || { name: 'Unknown' };
+          const badgeClass = r.status === 'Pass' ? 'badge-success' : 'badge-error';
+          const dateStr = r.submittedAt || r.date || '';
+          
+          tbody.innerHTML += `
+            <tr>
+              <td style="font-weight: 500;">${student.name}</td>
+              <td>${r.examTitle || '—'}</td>
+              <td>${dateStr ? window.ExamPro.Utils.formatDate(dateStr) : '—'}</td>
+              <td>${r.score ?? '--'} / ${r.totalMarks ?? '--'}</td>
+              <td><span style="font-weight:600; color:var(--primary-color);">${r.percentage != null ? r.percentage.toFixed(1) + '%' : '—'}</span></td>
+              <td>${r.pointsEarned ?? 0}</td>
+              <td><span class="badge ${badgeClass}">${r.status || '—'}</span></td>
+            </tr>
+          `;
+        });
+      }
+
+      renderResults(allResults);
+
+      // Filters
+      const statusFilter = document.getElementById('statusFilter');
+
+      function applyFilters() {
+        const examId = filter.value;
+        const status = statusFilter.value;
+        const filtered = allResults.filter(r => {
+          const matchExam = examId === '' || r.examId === examId;
+          const matchStatus = status === '' || r.status === status;
+          return matchExam && matchStatus;
+        });
+        renderResults(filtered);
+      }
+
+      filter.addEventListener('change', applyFilters);
+      statusFilter.addEventListener('change', applyFilters);
+    });
+  </script>
+</body>
+</html>

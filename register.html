@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Register - Exam Pro</title>
+
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+  >
+
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/auth.css">
+  <link rel="stylesheet" href="css/3d-backgrounds.css">
+  <link rel="stylesheet" href="css/register.css">
+  <script src="js/theme.js"></script>
+</head>
+
+<body class="register-page">
+
+  <!-- 3D Nature Background -->
+  <div id="three-bg" aria-hidden="true"></div>
+
+  <!-- CSS Nature Foreground Layers (depth between canvas and card) -->
+  <div class="nature-foreground" aria-hidden="true">
+    <div class="grassy-base"></div>
+    <div class="leaf-blade lb-1"></div>
+    <div class="leaf-blade lb-2"></div>
+    <div class="leaf-blade lb-3"></div>
+    <i class="fa-solid fa-tree silhouette-pine sp-1"></i>
+    <i class="fa-solid fa-tree silhouette-pine sp-2"></i>
+    <div class="nature-stone ns-1"></div>
+    <div class="nature-stone ns-2"></div>
+    <div class="nature-stone ns-3"></div>
+    <div class="lantern-glow lg-1"></div>
+    <div class="lantern-glow lg-2"></div>
+    <div class="nature-firefly ff-1"></div>
+    <div class="nature-firefly ff-2"></div>
+    <div class="nature-firefly ff-3"></div>
+    <div class="nature-firefly ff-4"></div>
+  </div>
+
+  <!-- ── Cinematic 3D Navigation ─────────────────────────── -->
+  <nav class="navbar auth-navbar register-navbar">
+    <div class="logo">
+      <i class="fa-solid fa-graduation-cap"></i>
+      <span class="logo-text">Exam <span class="logo-pro">Pro</span></span>
+    </div>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="index.html#about">About</a>
+      <a href="login.html">Login</a>
+      <a href="register.html" class="active">Registration</a>
+    </div>
+    <div class="nav-actions">
+      <button class="theme-toggle" aria-label="Toggle theme" style="margin-right: 12px;">
+        <i class="theme-toggle-icon fa-solid fa-moon"></i>
+      </button>
+      <a href="index.html" class="btn btn-3d btn-back-home">
+        <i class="fa-solid fa-arrow-left"></i> <span>Back to Home</span>
+      </a>
+    </div>
+  </nav>
+
+  <!-- ── Register Card ────────────────────────────────────── -->
+  <div class="register-container three-content">
+
+    <div class="register-card auth-panel-3d">
+
+      <!-- Glass reflection sheen -->
+      <div class="card-sheen"></div>
+
+      <!-- CARD HEADER -->
+      <div class="register-card-header">
+
+        <div class="register-icon">
+          <i class="fa-solid fa-graduation-cap"></i>
+        </div>
+
+        <h2 class="register-title">
+          Create Your <span class="register-title-gradient">Account</span>
+        </h2>
+
+        <p class="register-subtitle">
+          Join Exam Pro and start your learning journey.
+        </p>
+
+      </div>
+
+
+      <!-- REGISTER FORM -->
+      <form id="registerForm">
+
+        <!-- FULL NAME + STUDENT ID -->
+        <div class="form-row">
+
+          <div class="form-group">
+            <label class="form-label" for="fullName">
+              Full Name
+            </label>
+
+            <div class="input-wrapper">
+              <i class="fa-solid fa-user input-icon"></i>
+              <input
+                type="text"
+                id="fullName"
+                class="form-control register-input"
+                placeholder="John Doe"
+                required
+              >
+            </div>
+          </div>
+
+
+          <div class="form-group">
+            <label class="form-label" for="studentId">
+              Student ID
+            </label>
+
+            <div class="input-wrapper">
+              <i class="fa-solid fa-id-card input-icon"></i>
+              <input
+                type="text"
+                id="studentId"
+                class="form-control register-input"
+                placeholder="e.g. STU12345"
+                required
+              >
+            </div>
+          </div>
+
+        </div>
+
+
+        <!-- EMAIL -->
+        <div class="form-group">
+          <label class="form-label" for="email">
+            Email Address
+          </label>
+
+          <div class="input-wrapper">
+            <i class="fa-solid fa-envelope input-icon"></i>
+            <input
+              type="email"
+              id="email"
+              class="form-control register-input"
+              placeholder="you@example.com"
+              required
+            >
+          </div>
+        </div>
+
+
+        <!-- DEPARTMENT + SEMESTER -->
+        <div class="form-row">
+
+          <div class="form-group">
+            <label class="form-label" for="department">
+              Department
+            </label>
+
+            <div class="input-wrapper">
+              <i class="fa-solid fa-building-columns input-icon"></i>
+              <select
+                id="department"
+                class="form-control register-input"
+                required
+              >
+                <option value="" disabled selected>
+                  Select Dept
+                </option>
+                <option value="Computer Science">Computer Science</option>
+                <option value="Information Technology">Information Technology</option>
+                <option value="Electronics">Electronics</option>
+              </select>
+            </div>
+          </div>
+
+
+          <div class="form-group">
+            <label class="form-label" for="semester">
+              Semester
+            </label>
+
+            <div class="input-wrapper">
+              <i class="fa-solid fa-layer-group input-icon"></i>
+              <select
+                id="semester"
+                class="form-control register-input"
+                required
+              >
+                <option value="" disabled selected>
+                  Select Sem
+                </option>
+                <option value="1st">1st Semester</option>
+                <option value="2nd">2nd Semester</option>
+                <option value="3rd">3rd Semester</option>
+                <option value="4th">4th Semester</option>
+                <option value="5th">5th Semester</option>
+                <option value="6th">6th Semester</option>
+                <option value="7th">7th Semester</option>
+                <option value="8th">8th Semester</option>
+              </select>
+            </div>
+          </div>
+
+        </div>
+
+
+        <!-- PASSWORD -->
+        <div class="form-group">
+          <label class="form-label" for="password">
+            Password
+          </label>
+
+          <div class="input-wrapper">
+            <i class="fa-solid fa-lock input-icon"></i>
+            <input
+              type="password"
+              id="password"
+              class="form-control register-input"
+              placeholder="Create a strong password"
+              required
+            >
+            <i class="fa-regular fa-eye toggle-password" id="togglePassword"></i>
+          </div>
+
+          <!-- PASSWORD STRENGTH -->
+          <div class="password-strength">
+            <div class="strength-bar" id="str1"></div>
+            <div class="strength-bar" id="str2"></div>
+            <div class="strength-bar" id="str3"></div>
+            <div class="strength-bar" id="str4"></div>
+          </div>
+
+          <div class="strength-text" id="strText">
+            Password Strength
+          </div>
+        </div>
+
+
+        <!-- CONFIRM PASSWORD -->
+        <div class="form-group mb-lg">
+          <label class="form-label" for="confirmPassword">
+            Confirm Password
+          </label>
+
+          <div class="input-wrapper">
+            <i class="fa-solid fa-lock input-icon"></i>
+            <input
+              type="password"
+              id="confirmPassword"
+              class="form-control register-input"
+              placeholder="Confirm your password"
+              required
+            >
+            <i class="fa-regular fa-eye toggle-password" id="toggleConfirm"></i>
+          </div>
+        </div>
+
+
+        <!-- CREATE ACCOUNT BUTTON -->
+        <button
+          type="submit"
+          class="btn btn-3d register-submit-btn"
+          id="regBtn"
+        >
+          <i class="fa-solid fa-user-plus"></i>
+          Create Account
+        </button>
+
+      </form>
+
+
+      <!-- DIVIDER -->
+      <div class="divider register-divider">
+        OR
+      </div>
+
+
+      <!-- GOOGLE REGISTRATION -->
+      <button
+        type="button"
+        class="btn btn-3d google-register-btn"
+        id="googleRegisterBtn"
+      >
+        <svg class="google-icon" viewBox="0 0 48 48" width="20" height="20" aria-hidden="true">
+          <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+          <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+          <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+          <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+        </svg>
+        Continue with Google
+      </button>
+
+
+      <!-- LOGIN LINK -->
+      <div class="auth-footer register-footer">
+
+        Already have an account?
+
+        <a href="login.html">
+          Login
+        </a>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- Three.js Import Map -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js"
+    }
+  }
+  </script>
+
+
+  <!-- Existing global JavaScript -->
+  <script src="js/main.js"></script>
+
+  <!-- 3D Background + UI Effects + Card Parallax -->
+  <script type="module">
+    import initBackground from "./js/3d/init-background.js";
+    import { initUiEffects } from "./js/3d/ui-effects.js";
+    import { initCardParallax } from "./js/3d/card-parallax.js";
+    initBackground();
+    initUiEffects();
+    initCardParallax();
+  </script>
+
+  <!-- Firebase registration logic -->
+  <script
+    type="module"
+    src="js/register.js?v=3"
+  ></script>
+
+</body>
+
+</html>

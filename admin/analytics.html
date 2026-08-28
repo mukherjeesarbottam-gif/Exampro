@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Analytics - ExamPro</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/dashboard.css">
+  <link rel="stylesheet" href="../css/admin.css">
+  <script src="../js/theme.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+  <div class="dashboard-layout">
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    <aside class="sidebar sidebar-admin" id="sidebar">
+      <div class="sidebar-header">
+        <a href="dashboard.html" class="sidebar-logo">
+          <i class="fa-solid fa-user-shield"></i> AdminPro
+        </a>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="dashboard.html" class="nav-item"><i class="fa-solid fa-border-all"></i> Dashboard</a>
+        <a href="exams.html" class="nav-item"><i class="fa-solid fa-file-signature"></i> Exams</a>
+        <a href="questions.html" class="nav-item"><i class="fa-solid fa-list-check"></i> Questions</a>
+        <a href="students.html" class="nav-item"><i class="fa-solid fa-users"></i> Students</a>
+        <a href="results.html" class="nav-item"><i class="fa-solid fa-award"></i> Results</a>
+        <a href="analytics.html" class="nav-item active"><i class="fa-solid fa-chart-line"></i> Analytics</a>
+      </nav>
+      <div class="sidebar-footer">
+        <a href="#" class="nav-item" id="logoutBtn"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</a>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="menu-toggle" id="menuToggle"><i class="fa-solid fa-bars"></i></button>
+          <div class="page-title" style="margin:0; font-size: 1.25rem;">Analytics Overview</div>
+        </div>
+        <div class="topbar-right">
+          <button class="theme-toggle" aria-label="Toggle theme">
+            <i class="theme-toggle-icon fa-solid fa-moon"></i>
+          </button>
+          <select class="form-control" style="width: auto;">
+            <option>Last 30 Days</option>
+            <option>This Year</option>
+            <option>All Time</option>
+          </select>
+        </div>
+      </header>
+
+      <div class="dashboard-body">
+        
+        <div class="stats-cards-grid">
+          <div class="card stat-card">
+            <div class="stat-icon primary"><i class="fa-solid fa-laptop-code"></i></div>
+            <div class="stat-details">
+              <h4 id="statTotalAttempts"><i class="fa-solid fa-spinner fa-spin"></i></h4>
+              <p>Total Attempts</p>
+            </div>
+          </div>
+          <div class="card stat-card">
+            <div class="stat-icon info"><i class="fa-solid fa-bullseye"></i></div>
+            <div class="stat-details">
+              <h4 id="statAvgScore"><i class="fa-solid fa-spinner fa-spin"></i></h4>
+              <p>Average Score</p>
+            </div>
+          </div>
+          <div class="card stat-card">
+            <div class="stat-icon success"><i class="fa-solid fa-check"></i></div>
+            <div class="stat-details">
+              <h4 id="statTotalPoints"><i class="fa-solid fa-spinner fa-spin"></i></h4>
+              <p>Total Points Awarded</p>
+            </div>
+          </div>
+          <div class="card stat-card">
+            <div class="stat-icon warning"><i class="fa-solid fa-hourglass-end"></i></div>
+            <div class="stat-details">
+              <h4 id="statScheduledExams"><i class="fa-solid fa-spinner fa-spin"></i></h4>
+              <p>Scheduled Exams</p>
+            </div>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-lg); margin-bottom: var(--spacing-lg);">
+          
+          <div class="card admin-chart-card">
+            <div class="card-header">
+              <h3>Score Distribution</h3>
+            </div>
+            <div class="card-body">
+              <canvas id="scoreDistChart"></canvas>
+            </div>
+          </div>
+
+          <div class="card admin-chart-card">
+            <div class="card-header">
+              <h3>Exam Performance Comparison</h3>
+            </div>
+            <div class="card-body">
+              <canvas id="examPerfChart"></canvas>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <script src="../js/main.js"></script>
+  <script type="module">
+    import "../js/services/authService.js";
+    import "../js/services/adminService.js";
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      await window.ExamPro.AuthService.requireAuth('admin');
+
+      // Load real stats
+      const stats = await window.ExamPro.AdminService.getDashboardStats();
+
+      const set = (id, val) => {
+        const el = document.getElementById(id);
+        if (el) el.innerText = val;
+      };
+
+      set('statTotalAttempts', stats.totalAttempts);
+      set('statAvgScore', `${stats.averageScore}%`);
+      set('statTotalPoints', stats.totalPoints);
+      set('statScheduledExams', stats.scheduledExams);
+
+      // Load chart data
+      const [distData, perfData] = await Promise.all([
+        window.ExamPro.AdminService.getScoreDistribution(),
+        window.ExamPro.AdminService.getExamPerformance()
+      ]);
+
+      // Score Distribution
+      new Chart(document.getElementById('scoreDistChart'), {
+        type: 'bar',
+        data: {
+          labels: distData.labels,
+          datasets: [{
+            label: 'Number of Students',
+            data: distData.data,
+            backgroundColor: '#10B981',
+            borderRadius: 4
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { display: false } },
+          scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }
+        }
+      });
+
+      // Exam Performance
+      new Chart(document.getElementById('examPerfChart'), {
+        type: 'radar',
+        data: {
+          labels: perfData.labels,
+          datasets: [{
+            label: 'Average Score',
+            data: perfData.data,
+            backgroundColor: 'rgba(79, 70, 229, 0.2)',
+            borderColor: '#4F46E5',
+            pointBackgroundColor: '#4F46E5'
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            r: {
+              angleLines: { display: false },
+              suggestedMin: 0,
+              suggestedMax: 100
+            }
+          }
+        }
+      });
+    });
+  </script>
+</body>
+</html>

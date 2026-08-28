@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Profile - ExamPro</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/dashboard.css">
+  <script src="../js/theme.js"></script>
+  <style>
+    .profile-header {
+      background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-hover) 100%);
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-2xl);
+      color: white;
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-xl);
+      margin-bottom: var(--spacing-xl);
+      box-shadow: var(--shadow-md);
+    }
+    .profile-avatar-large {
+      width: 100px;
+      height: 100px;
+      background-color: white;
+      color: var(--primary-color);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      font-weight: 700;
+      box-shadow: var(--shadow-sm);
+    }
+    .profile-info h1 {
+      color: white;
+      margin-bottom: var(--spacing-xs);
+    }
+    .profile-info p {
+      opacity: 0.9;
+      font-size: 1.125rem;
+    }
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--spacing-lg);
+    }
+    @media (max-width: 768px) {
+      .profile-header {
+        flex-direction: column;
+        text-align: center;
+      }
+      .info-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="dashboard-layout">
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <a href="dashboard.html" class="sidebar-logo">
+          <i class="fa-solid fa-graduation-cap"></i> ExamPro
+        </a>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="dashboard.html" class="nav-item">
+          <i class="fa-solid fa-border-all"></i> Dashboard
+        </a>
+        <a href="available-exams.html" class="nav-item">
+          <i class="fa-solid fa-list-check"></i> Available Exams
+        </a>
+        <a href="results.html" class="nav-item">
+          <i class="fa-solid fa-award"></i> My Results
+        </a>
+        <a href="profile.html" class="nav-item active">
+          <i class="fa-regular fa-user"></i> Profile
+        </a>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="menu-toggle" id="menuToggle">
+            <i class="fa-solid fa-bars"></i>
+          </button>
+          <div class="page-title" style="margin:0; font-size: 1.25rem;">My Profile</div>
+        </div>
+        <div class="topbar-right">
+          <button class="theme-toggle" aria-label="Toggle theme">
+            <i class="theme-toggle-icon fa-solid fa-moon"></i>
+          </button>
+        </div>
+      </header>
+
+      <div class="dashboard-body">
+        
+        <div class="profile-header">
+          <div class="profile-avatar-large" id="bigAvatar">S</div>
+          <div class="profile-info">
+            <h1 id="pName">Student Name</h1>
+            <p id="pId">STU12345</p>
+          </div>
+          <button class="btn btn-outline" style="margin-left: auto; color: white; border-color: white;">Edit Profile</button>
+        </div>
+
+        <div class="info-grid">
+          <div class="card">
+            <div class="card-header">
+              <h3>Personal Information</h3>
+            </div>
+            <div class="card-body flex-col gap-md">
+              <div>
+                <label class="text-muted" style="font-size: 0.875rem;">Full Name</label>
+                <div style="font-weight: 500;" id="infoName">Loading...</div>
+              </div>
+              <div>
+                <label class="text-muted" style="font-size: 0.875rem;">Email Address</label>
+                <div style="font-weight: 500;" id="infoEmail">Loading...</div>
+              </div>
+              <div>
+                <label class="text-muted" style="font-size: 0.875rem;">Role</label>
+                <div style="font-weight: 500; text-transform: capitalize;" id="infoRole">Student</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3>Academic Information</h3>
+            </div>
+            <div class="card-body flex-col gap-md">
+              <div>
+                <label class="text-muted" style="font-size: 0.875rem;">Student ID</label>
+                <div style="font-weight: 500;" id="infoStudentId">Loading...</div>
+              </div>
+              <div>
+                <label class="text-muted" style="font-size: 0.875rem;">Department</label>
+                <div style="font-weight: 500;" id="infoDept">Loading...</div>
+              </div>
+              <div>
+                <label class="text-muted" style="font-size: 0.875rem;">Semester</label>
+                <div style="font-weight: 500;" id="infoSem">Loading...</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <script src="../js/main.js"></script>
+  <script type="module">
+    import "../js/services/authService.js";
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      const user = await window.ExamPro.AuthService.requireAuth('student');
+      if (!user) return;
+
+      document.getElementById('bigAvatar').innerText = user.name.charAt(0).toUpperCase();
+      document.getElementById('pName').innerText = user.name;
+      document.getElementById('pId').innerText = user.studentId || 'N/A';
+
+      document.getElementById('infoName').innerText = user.name;
+      document.getElementById('infoEmail').innerText = user.email;
+      document.getElementById('infoRole').innerText = user.role;
+
+      document.getElementById('infoStudentId').innerText = user.studentId || 'N/A';
+      document.getElementById('infoDept').innerText = user.department || 'N/A';
+      document.getElementById('infoSem').innerText = user.semester || 'N/A';
+    });
+  </script>
+</body>
+</html>

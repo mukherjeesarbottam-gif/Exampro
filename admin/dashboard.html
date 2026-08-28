@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - ExamPro</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/dashboard.css">
+  <link rel="stylesheet" href="../css/admin.css">
+  <script src="../js/theme.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+  <div class="dashboard-layout">
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    <aside class="sidebar sidebar-admin" id="sidebar">
+      <div class="sidebar-header">
+        <a href="dashboard.html" class="sidebar-logo">
+          <i class="fa-solid fa-user-shield"></i> AdminPro
+        </a>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="dashboard.html" class="nav-item active"><i class="fa-solid fa-border-all"></i> Dashboard</a>
+        <a href="exams.html" class="nav-item"><i class="fa-solid fa-file-signature"></i> Exams</a>
+        <a href="questions.html" class="nav-item"><i class="fa-solid fa-list-check"></i> Questions</a>
+        <a href="students.html" class="nav-item"><i class="fa-solid fa-users"></i> Students</a>
+        <a href="results.html" class="nav-item"><i class="fa-solid fa-award"></i> Results</a>
+        <a href="analytics.html" class="nav-item"><i class="fa-solid fa-chart-line"></i> Analytics</a>
+      </nav>
+      <div class="sidebar-footer">
+        <a href="#" class="nav-item" id="logoutBtn"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</a>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="menu-toggle" id="menuToggle"><i class="fa-solid fa-bars"></i></button>
+          <div class="search-bar">
+            <i class="fa-solid fa-magnifying-glass text-muted"></i>
+            <input type="text" placeholder="Search...">
+          </div>
+        </div>
+        <div class="topbar-right">
+          <button class="theme-toggle" aria-label="Toggle theme">
+            <i class="theme-toggle-icon fa-solid fa-moon"></i>
+          </button>
+          <button class="notification-btn"><i class="fa-regular fa-bell"></i></button>
+          <div class="user-profile">
+            <div class="avatar" id="adminAvatar" style="background-color: var(--warning-bg); color: var(--warning-color);">A</div>
+            <div class="user-info">
+              <span class="user-name" id="adminName">Admin User</span>
+              <span class="user-role">Administrator</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div class="dashboard-body">
+        <div class="page-header">
+          <h1 class="page-title">Admin Dashboard</h1>
+          <p class="page-subtitle">Overview of the examination platform.</p>
+        </div>
+
+        <div class="stats-cards-grid">
+          <div class="card stat-card">
+            <div class="stat-icon info"><i class="fa-solid fa-users"></i></div>
+            <div class="stat-details">
+              <h4 id="statTotalStudents"><i class="fa-solid fa-spinner fa-spin"></i></h4>
+              <p>Total Students</p>
+            </div>
+          </div>
+          <div class="card stat-card">
+            <div class="stat-icon primary"><i class="fa-solid fa-file-signature"></i></div>
+            <div class="stat-details">
+              <h4 id="statTotalExams"><i class="fa-solid fa-spinner fa-spin"></i></h4>
+              <p>Total Exams</p>
+            </div>
+          </div>
+          <div class="card stat-card">
+            <div class="stat-icon success"><i class="fa-solid fa-check-double"></i></div>
+            <div class="stat-details">
+              <h4 id="statTotalAttempts"><i class="fa-solid fa-spinner fa-spin"></i></h4>
+              <p>Total Attempts</p>
+            </div>
+          </div>
+          <div class="card stat-card">
+            <div class="stat-icon warning"><i class="fa-solid fa-chart-pie"></i></div>
+            <div class="stat-details">
+              <h4 id="statAvgScore"><i class="fa-solid fa-spinner fa-spin"></i></h4>
+              <p>Average Score</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="content-grid">
+          <div class="main-col">
+            <div class="card mb-lg admin-chart-card">
+              <div class="card-header">
+                <h3>Exam Attempts Over Time</h3>
+              </div>
+              <div class="card-body">
+                <canvas id="attemptsChart"></canvas>
+              </div>
+            </div>
+          </div>
+          <div class="side-col">
+            <div class="card admin-chart-card">
+              <div class="card-header">
+                <h3>Completion Rate</h3>
+              </div>
+              <div class="card-body" style="display:flex; justify-content:center; align-items:center; height:100%;">
+                <canvas id="completionChart" style="max-height:200px;"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <script src="../js/main.js"></script>
+  <script type="module" src="../js/admin/dashboard.js"></script>
+</body>
+</html>

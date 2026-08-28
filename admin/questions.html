@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Questions - ExamPro</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/dashboard.css">
+  <link rel="stylesheet" href="../css/admin.css">
+  <script src="../js/theme.js"></script>
+</head>
+<body>
+
+  <div class="dashboard-layout">
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    <aside class="sidebar sidebar-admin" id="sidebar">
+      <div class="sidebar-header">
+        <a href="dashboard.html" class="sidebar-logo">
+          <i class="fa-solid fa-user-shield"></i> AdminPro
+        </a>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="dashboard.html" class="nav-item"><i class="fa-solid fa-border-all"></i> Dashboard</a>
+        <a href="exams.html" class="nav-item"><i class="fa-solid fa-file-signature"></i> Exams</a>
+        <a href="questions.html" class="nav-item active"><i class="fa-solid fa-list-check"></i> Questions</a>
+        <a href="students.html" class="nav-item"><i class="fa-solid fa-users"></i> Students</a>
+        <a href="results.html" class="nav-item"><i class="fa-solid fa-award"></i> Results</a>
+        <a href="analytics.html" class="nav-item"><i class="fa-solid fa-chart-line"></i> Analytics</a>
+      </nav>
+      <div class="sidebar-footer">
+        <a href="#" class="nav-item" id="logoutBtn"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</a>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="menu-toggle" id="menuToggle"><i class="fa-solid fa-bars"></i></button>
+          <div class="page-title" style="margin:0; font-size: 1.25rem;">Manage Questions</div>
+        </div>
+        <div class="topbar-right">
+          <button class="theme-toggle" aria-label="Toggle theme">
+            <i class="theme-toggle-icon fa-solid fa-moon"></i>
+          </button>
+        </div>
+      </header>
+
+      <div class="dashboard-body">
+        
+        <div class="card mb-lg">
+          <div class="card-body flex justify-between items-center" style="flex-wrap: wrap; gap: 16px;">
+            <div class="flex gap-md items-center">
+              <label style="font-weight: 500; white-space: nowrap;">Select Exam:</label>
+              <select class="form-control" style="width: 300px;" id="examSelector">
+                <!-- Injected via JS -->
+              </select>
+            </div>
+            
+            <button class="btn btn-primary" id="addQuestionBtn"><i class="fa-solid fa-plus"></i> Add Question</button>
+          </div>
+        </div>
+
+        <div id="questionsContainer" style="display: flex; flex-direction: column; gap: var(--spacing-md);">
+          <!-- Injected via JS -->
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- Add Question Modal -->
+  <div class="modal-overlay" id="questionModal">
+    <div class="modal-content" style="max-width: 600px; padding: var(--spacing-xl);">
+      <h2 class="mb-md">Add Question</h2>
+      
+      <form id="questionForm">
+        <div class="form-group">
+          <label class="form-label">Question Text</label>
+          <textarea id="qText" class="form-control" rows="3" required></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">Option A</label>
+          <input type="text" id="qOptA" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Option B</label>
+          <input type="text" id="qOptB" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Option C</label>
+          <input type="text" id="qOptC" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Option D</label>
+          <input type="text" id="qOptD" class="form-control" required>
+        </div>
+        
+        <div class="flex gap-md">
+          <div class="form-group" style="flex:1;">
+            <label class="form-label">Correct Answer</label>
+            <select id="qCorrect" class="form-control">
+              <option value="0">Option A</option>
+              <option value="1">Option B</option>
+              <option value="2">Option C</option>
+              <option value="3">Option D</option>
+            </select>
+          </div>
+          <div class="form-group" style="flex:1;">
+            <label class="form-label">Marks</label>
+            <input type="number" id="qMarks" class="form-control" value="1" required min="1">
+          </div>
+          <div class="form-group" style="flex:1;">
+            <label class="form-label">Points</label>
+            <input type="number" id="qPoints" class="form-control" value="1" min="0">
+          </div>
+        </div>
+
+        <div class="flex justify-end gap-sm mt-md">
+          <button type="button" class="btn btn-outline" id="closeModalBtn">Cancel</button>
+          <button type="submit" id="saveQuestionBtn" class="btn btn-primary">Save Question</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="../js/main.js"></script>
+  <script type="module">
+    import "../js/services/authService.js";
+    import "../js/services/examService.js";
+    import "../js/services/questionService.js";
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      await window.ExamPro.AuthService.requireAuth('admin');
+
+      const allExams = await window.ExamPro.ExamService.getAllExams();
+      const selector = document.getElementById('examSelector');
+
+      if(allExams.length === 0) {
+        selector.innerHTML = '<option value="">No exams available</option>';
+      } else {
+        allExams.forEach(e => {
+          selector.innerHTML += `<option value="${e.id}">${e.title}</option>`;
+        });
+      }
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const preselected = urlParams.get('examId');
+      if(preselected) selector.value = preselected;
+
+      async function loadQuestions() {
+        const examId = selector.value;
+        if(!examId) {
+          document.getElementById('questionsContainer').innerHTML = '<div class="card card-body text-center text-muted">Select an exam to view questions.</div>';
+          return;
+        }
+
+        const [questions, answersMap] = await Promise.all([
+          window.ExamPro.QuestionService.getQuestionsForExam(examId),
+          window.ExamPro.QuestionService.getAnswersForExam(examId)
+        ]);
+        const container = document.getElementById('questionsContainer');
+        
+        container.innerHTML = '';
+        if(questions.length === 0) {
+          container.innerHTML = '<div class="card card-body text-center text-muted">No questions found for this exam.</div>';
+          return;
+        }
+
+        const letters = ['A', 'B', 'C', 'D'];
+        questions.forEach((q, index) => {
+          const correctAnswer = answersMap[q.id];
+          
+          let optionsHtml = '';
+          q.options.forEach((opt, i) => {
+            const isCorrect = i === correctAnswer;
+            const colorClass = isCorrect ? 'text-success' : 'text-muted';
+            const iconClass = isCorrect ? 'fa-solid fa-check' : 'fa-regular fa-circle';
+            optionsHtml += `
+              <div style="margin-bottom: 8px;" class="${colorClass}">
+                <i class="${iconClass}"></i> <strong>${letters[i]}.</strong> ${opt}
+              </div>
+            `;
+          });
+
+          container.innerHTML += `
+            <div class="card">
+              <div class="card-body">
+                <div class="flex justify-between items-start mb-md">
+                  <strong class="text-primary">Question ${index + 1}</strong>
+                  <div class="flex gap-sm">
+                    <span class="badge badge-primary">${q.marks} Marks</span>
+                    <span class="badge badge-warning">${q.points || q.marks} Pts</span>
+                    <button class="btn btn-icon btn-ghost text-error delete-question-btn" data-question-id="${q.id}" title="Delete"><i class="fa-regular fa-trash-can"></i></button>
+                  </div>
+                </div>
+                <div style="font-weight: 500; font-size: 1.125rem; margin-bottom: 1rem;">${q.text}</div>
+                <div>${optionsHtml}</div>
+              </div>
+            </div>
+          `;
+        });
+
+        // Attach delete handlers
+        document.querySelectorAll('.delete-question-btn').forEach(btn => {
+          btn.addEventListener('click', async () => {
+            const questionId = btn.getAttribute('data-question-id');
+            if(!confirm('Delete this question?')) return;
+            
+            try {
+              await window.ExamPro.QuestionService.deleteQuestion(examId, questionId);
+              window.ExamPro.Utils.showToast('Question deleted successfully!', 'success');
+              loadQuestions();
+            } catch (error) {
+              console.error("Error deleting question:", error);
+              window.ExamPro.Utils.showToast('Failed to delete question.', 'error');
+            }
+          });
+        });
+      }
+
+      selector.addEventListener('change', loadQuestions);
+      if(allExams.length > 0) loadQuestions();
+
+      // Modal
+      const modal = document.getElementById('questionModal');
+      const addQuestionBtn = document.getElementById('addQuestionBtn');
+      const closeModalBtn = document.getElementById('closeModalBtn');
+      const saveQuestionBtn = document.getElementById('saveQuestionBtn');
+      const questionForm = document.getElementById('questionForm');
+
+      addQuestionBtn.onclick = () => {
+        if(!selector.value) {
+          window.ExamPro.Utils.showToast('Please select an exam first.', 'warning');
+          return;
+        }
+        questionForm.reset();
+        modal.classList.add('active');
+      };
+      
+      closeModalBtn.onclick = () => modal.classList.remove('active');
+
+      questionForm.onsubmit = async (e) => {
+        e.preventDefault();
+
+        const questionData = {
+          text: document.getElementById('qText').value.trim(),
+          options: [
+            document.getElementById('qOptA').value.trim(),
+            document.getElementById('qOptB').value.trim(),
+            document.getElementById('qOptC').value.trim(),
+            document.getElementById('qOptD').value.trim()
+          ],
+          correctAnswer: parseInt(document.getElementById('qCorrect').value),
+          marks: parseInt(document.getElementById('qMarks').value),
+          points: parseInt(document.getElementById('qPoints').value) || parseInt(document.getElementById('qMarks').value)
+        };
+
+        saveQuestionBtn.disabled = true;
+        saveQuestionBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saving...';
+
+        try {
+          await window.ExamPro.QuestionService.addQuestion(selector.value, questionData);
+          modal.classList.remove('active');
+          window.ExamPro.Utils.showToast('Question added successfully!', 'success');
+          loadQuestions();
+        } catch (error) {
+          console.error("Error adding question:", error);
+          window.ExamPro.Utils.showToast('Failed to add question.', 'error');
+        } finally {
+          saveQuestionBtn.disabled = false;
+          saveQuestionBtn.innerHTML = 'Save Question';
+        }
+      };
+    });
+  </script>
+</body>
+</html>

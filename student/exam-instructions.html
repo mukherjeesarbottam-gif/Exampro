@@ -1,0 +1,202 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Exam Instructions - ExamPro</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <script src="../js/theme.js"></script>
+  <style>
+    .instructions-layout {
+      min-height: 100vh;
+      background-color: var(--bg-color);
+      display: flex;
+      flex-direction: column;
+    }
+    .topbar-simple {
+      height: 70px;
+      background-color: var(--card-bg);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      padding: 0 var(--spacing-xl);
+    }
+    .main-container {
+      max-width: 900px;
+      margin: var(--spacing-2xl) auto;
+      padding: 0 var(--spacing-lg);
+      flex: 1;
+      width: 100%;
+    }
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--spacing-md);
+      margin-bottom: var(--spacing-xl);
+    }
+    @media (max-width: 600px) {
+      .info-grid { grid-template-columns: 1fr 1fr; }
+    }
+    .info-card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: var(--spacing-md);
+      text-align: center;
+    }
+    .instructions-list {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-xl);
+      margin-bottom: var(--spacing-xl);
+    }
+    .instructions-list li {
+      margin-bottom: var(--spacing-md);
+      display: flex;
+      gap: var(--spacing-md);
+    }
+    .instructions-list li i {
+      color: var(--primary-color);
+      margin-top: 4px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="instructions-layout">
+    <header class="topbar-simple">
+      <div class="logo">
+        <i class="fa-solid fa-graduation-cap"></i> ExamPro
+      </div>
+      <button class="theme-toggle" aria-label="Toggle theme" style="margin-left: auto;">
+        <i class="theme-toggle-icon fa-solid fa-moon"></i>
+      </button>
+      <a href="dashboard.html" class="btn btn-ghost" style="margin-left: 12px;">Back to Dashboard</a>
+    </header>
+
+    <main class="main-container">
+      <h1 class="mb-sm" id="examTitle">Loading...</h1>
+      <p class="text-muted mb-xl" id="examSubject">Loading subject...</p>
+
+      <div class="info-grid">
+        <div class="info-card">
+          <i class="fa-regular fa-clock text-primary mb-sm" style="font-size: 1.5rem;"></i>
+          <h4 id="examDuration">--</h4>
+          <p class="text-muted" style="font-size: 0.75rem;">Duration (Mins)</p>
+        </div>
+        <div class="info-card">
+          <i class="fa-solid fa-list-ol text-primary mb-sm" style="font-size: 1.5rem;"></i>
+          <h4 id="examQuestions">--</h4>
+          <p class="text-muted" style="font-size: 0.75rem;">Total Questions</p>
+        </div>
+        <div class="info-card">
+          <i class="fa-solid fa-check-double text-primary mb-sm" style="font-size: 1.5rem;"></i>
+          <h4 id="examTotalMarks">--</h4>
+          <p class="text-muted" style="font-size: 0.75rem;">Total Marks</p>
+        </div>
+        <div class="info-card">
+          <i class="fa-solid fa-bullseye text-primary mb-sm" style="font-size: 1.5rem;"></i>
+          <h4 id="examPassingMarks">--</h4>
+          <p class="text-muted" style="font-size: 0.75rem;">Passing Marks</p>
+        </div>
+      </div>
+
+      <div class="instructions-list">
+        <h2 class="mb-lg">General Instructions</h2>
+        <ul>
+          <li>
+            <i class="fa-solid fa-circle-right"></i>
+            <div>The examination will consist of multiple-choice questions. Each question has four options, out of which only one is correct.</div>
+          </li>
+          <li>
+            <i class="fa-solid fa-circle-right"></i>
+            <div>The timer will start automatically once you click the "Start Examination" button. The test will be auto-submitted when the time is up.</div>
+          </li>
+          <li>
+            <i class="fa-solid fa-circle-right"></i>
+            <div>You can navigate through questions using the question palette on the right side or the Next/Previous buttons.</div>
+          </li>
+          <li>
+            <i class="fa-solid fa-circle-right"></i>
+            <div>Do not refresh the page or press the back button during the examination, as it may result in immediate submission.</div>
+          </li>
+          <li>
+            <i class="fa-solid fa-circle-right"></i>
+            <div>You can mark questions for review if you are unsure of the answer and want to revisit them later.</div>
+          </li>
+        </ul>
+
+        <div class="mt-xl" style="padding-top: var(--spacing-lg); border-top: 1px solid var(--border-color);">
+          <label style="display: flex; align-items: center; gap: 8px; font-weight: 500; cursor: pointer;">
+            <input type="checkbox" id="agreeCheckbox" style="width: 18px; height: 18px;">
+            I have read and understood the instructions.
+          </label>
+        </div>
+      </div>
+
+      <div style="text-align: right; margin-bottom: var(--spacing-2xl);">
+        <button class="btn btn-primary" id="startBtn" disabled style="padding: 1rem 2rem; font-size: 1.125rem;">Start Examination</button>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="../js/main.js"></script>
+  <script type="module">
+    import "../js/services/authService.js";
+    import "../js/services/examService.js";
+    import "../js/services/questionService.js";
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      const user = await window.ExamPro.AuthService.requireAuth('student');
+      if (!user) return;
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const examId = urlParams.get('id');
+
+      if(!examId) {
+        window.location.href = 'available-exams.html';
+        return;
+      }
+
+      const exam = await window.ExamPro.ExamService.getExamById(examId);
+      if(!exam) {
+        alert("Exam not found");
+        window.location.href = 'available-exams.html';
+        return;
+      }
+
+      // Verify questions actually exist for this exam
+      const questions = await window.ExamPro.QuestionService.getQuestionsForExam(examId);
+      if(questions.length === 0) {
+        alert("This exam has no questions yet. Please try again later.");
+        window.location.href = 'available-exams.html';
+        return;
+      }
+
+      document.getElementById('examTitle').innerText = exam.title;
+      document.getElementById('examSubject').innerText = exam.subject;
+      document.getElementById('examDuration').innerText = exam.duration;
+      document.getElementById('examQuestions').innerText = exam.totalQuestions;
+      document.getElementById('examTotalMarks').innerText = exam.totalMarks;
+      document.getElementById('examPassingMarks').innerText = exam.passingMarks;
+
+      const agreeCheckbox = document.getElementById('agreeCheckbox');
+      const startBtn = document.getElementById('startBtn');
+
+      agreeCheckbox.addEventListener('change', (e) => {
+        startBtn.disabled = !e.target.checked;
+      });
+
+      startBtn.addEventListener('click', () => {
+        // Go full screen potentially
+        window.location.href = `exam-interface.html?id=${exam.id}`;
+      });
+    });
+  </script>
+</body>
+</html>
